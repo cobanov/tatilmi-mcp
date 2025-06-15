@@ -43,8 +43,8 @@ python client.py  # Edit client.py to uncomment desired tests
 
 ## Data Files
 
-- `holidays.json` - Turkish holidays with timestamps
-- `birthdays.json` - Birthday records with timestamps
+- `data/holidays.json` - Turkish holidays with timestamps
+- `data/birthdays.json` - Birthday records with timestamps
 
 ## Dependencies
 
