@@ -2,12 +2,14 @@ import json
 from datetime import date
 from fastmcp import FastMCP
 
+# Create MCP server
 mcp = FastMCP("turkish-holidays")
 
-with open("tatiller.json", "r", encoding="utf-8") as f:
+# Load data once at startup
+with open("holidays.json", "r", encoding="utf-8") as f:
     holidays_data = json.load(f)
 
-with open("dogumgunleri.json", "r", encoding="utf-8") as f:
+with open("birthdays.json", "r", encoding="utf-8") as f:
     birthdays_data = json.load(f)
 
 
@@ -18,10 +20,32 @@ def get_current_date() -> dict:
     return {"current_date": today.strftime("%d.%m.%Y")}
 
 
-@mcp.tool()
+@mcp.resource("data://birthdays")
 def get_all_birthdays() -> dict:
     """Get all birthdays with their details."""
     return {"birthdays": birthdays_data}
+
+
+@mcp.resource("data://holidays")
+def get_all_holidays() -> dict:
+    """Get all holidays with their details."""
+    return {"holidays": holidays_data}
+
+
+@mcp.resource("data://holidays/{epoch}")
+def get_holiday_by_epoch(epoch: str) -> dict:
+    """Get holiday details for a specific epoch timestamp."""
+    epoch_int = int(epoch)
+    
+    for holiday in holidays_data:
+        if holiday["date"] == epoch_int:
+            return {
+                "title": holiday["title"],
+                "date": holiday["date"],
+                "localeDateString": holiday["localeDateString"]
+            }
+    
+    return {"error": "No holiday found for this epoch", "epoch": epoch_int}
 
 
 @mcp.tool()
@@ -34,9 +58,14 @@ def is_holiday(date_input: str) -> dict:
     """
     for holiday in holidays_data:
         if holiday["localeDateString"] == date_input:
-            return {"is_holiday": True, "holiday_name": holiday["title"]}
+            return {
+                "is_holiday": True, 
+                "holiday_name": holiday["title"],
+                "date": holiday["date"],
+                "localeDateString": holiday["localeDateString"]
+            }
     
-    return {"is_holiday": False}
+    return {"is_holiday": False, "date_checked": date_input}
 
 
 if __name__ == "__main__":
