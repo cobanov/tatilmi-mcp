@@ -6,10 +6,10 @@ from fastmcp import FastMCP
 mcp = FastMCP("turkish-holidays")
 
 # Load data once at startup
-with open("holidays.json", "r", encoding="utf-8") as f:
+with open("data/holidays.json", "r", encoding="utf-8") as f:
     holidays_data = json.load(f)
 
-with open("birthdays.json", "r", encoding="utf-8") as f:
+with open("data/birthdays.json", "r", encoding="utf-8") as f:
     birthdays_data = json.load(f)
 
 
