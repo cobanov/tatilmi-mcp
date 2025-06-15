@@ -2,10 +2,8 @@ import json
 from datetime import date
 from fastmcp import FastMCP
 
-# Create MCP server
 mcp = FastMCP("turkish-holidays")
 
-# Load data once at startup
 with open("tatiller.json", "r", encoding="utf-8") as f:
     holidays_data = json.load(f)
 
